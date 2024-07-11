@@ -1,4 +1,4 @@
-module github.com/h1uf/ibc-go/modules/capability
+module github.com/cosmos/ibc-go/modules/capability
 
 go 1.22
 
