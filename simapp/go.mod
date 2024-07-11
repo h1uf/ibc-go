@@ -2,7 +2,7 @@ go 1.22.2
 
 toolchain go1.22.3
 
-module github.com/cosmos/ibc-go/simapp
+module github.com/h1uf/ibc-go/simapp
 
 replace (
 	github.com/cosmos/ibc-go/modules/capability => ../modules/capability
