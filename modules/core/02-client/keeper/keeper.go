@@ -14,11 +14,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
-	host "github.com/cosmos/ibc-go/v8/modules/core/24-host"
-	"github.com/cosmos/ibc-go/v8/modules/core/exported"
-	ibctm "github.com/cosmos/ibc-go/v8/modules/light-clients/07-tendermint"
-	localhost "github.com/cosmos/ibc-go/v8/modules/light-clients/09-localhost"
+	"github.com/cosmos/ibc-go/v9/modules/core/02-client/types"
+	host "github.com/cosmos/ibc-go/v9/modules/core/24-host"
+	"github.com/cosmos/ibc-go/v9/modules/core/exported"
+	ibctm "github.com/cosmos/ibc-go/v9/modules/light-clients/07-tendermint"
+	localhost "github.com/cosmos/ibc-go/v9/modules/light-clients/09-localhost"
 )
 
 // Keeper represents a type that grants read and write permissions to any client
@@ -27,7 +27,6 @@ type Keeper struct {
 	storeKey       storetypes.StoreKey
 	cdc            codec.BinaryCodec
 	router         *types.Router
-	storeProvider  exported.ClientStoreProvider
 	consensusHost  types.ConsensusHost
 	legacySubspace types.ParamSubspace
 	upgradeKeeper  types.UpgradeKeeper
@@ -36,7 +35,6 @@ type Keeper struct {
 // NewKeeper creates a new NewKeeper instance
 func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, legacySubspace types.ParamSubspace, consensusHost types.ConsensusHost, uk types.UpgradeKeeper) *Keeper {
 	router := types.NewRouter()
-	storeProvider := types.NewStoreProvider(key)
 	localhostModule := localhost.NewLightClientModule(cdc, key)
 	router.AddRoute(exported.Localhost, localhostModule)
 
@@ -44,7 +42,6 @@ func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, legacySubspace ty
 		storeKey:       key,
 		cdc:            cdc,
 		router:         router,
-		storeProvider:  storeProvider,
 		consensusHost:  consensusHost,
 		legacySubspace: legacySubspace,
 		upgradeKeeper:  uk,
@@ -67,8 +64,8 @@ func (k *Keeper) GetRouter() *types.Router {
 }
 
 // GetStoreProvider returns the light client store provider.
-func (k *Keeper) GetStoreProvider() exported.ClientStoreProvider {
-	return k.storeProvider
+func (k *Keeper) GetStoreProvider() types.StoreProvider {
+	return types.NewStoreProvider(k.storeKey)
 }
 
 // Route returns the light client module for the given client identifier.
@@ -96,7 +93,7 @@ func (k *Keeper) Route(ctx sdk.Context, clientID string) (exported.LightClientMo
 // SetConsensusHost sets a custom ConsensusHost for self client state and consensus state validation.
 func (k *Keeper) SetConsensusHost(consensusHost types.ConsensusHost) {
 	if consensusHost == nil {
-		panic(fmt.Errorf("cannot set a nil self consensus host"))
+		panic(errors.New("cannot set a nil self consensus host"))
 	}
 
 	k.consensusHost = consensusHost
@@ -333,8 +330,8 @@ func (k *Keeper) ValidateSelfClient(ctx sdk.Context, clientState exported.Client
 	return k.consensusHost.ValidateSelfClient(ctx, clientState)
 }
 
-// VerifyMembershipProof retrieves the light client module for the clientID and verifies the proof of the existence of a key-value pair at a specified height.
-func (k *Keeper) VerifyMembershipProof(ctx sdk.Context, clientID string, height exported.Height, delayTimePeriod uint64, delayBlockPeriod uint64, proof []byte, path exported.Path, value []byte) error {
+// VerifyMembership retrieves the light client module for the clientID and verifies the proof of the existence of a key-value pair at a specified height.
+func (k *Keeper) VerifyMembership(ctx sdk.Context, clientID string, height exported.Height, delayTimePeriod uint64, delayBlockPeriod uint64, proof []byte, path exported.Path, value []byte) error {
 	clientModule, err := k.Route(ctx, clientID)
 	if err != nil {
 		return err
