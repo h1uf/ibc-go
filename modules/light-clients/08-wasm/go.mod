@@ -23,11 +23,11 @@ require (
 	cosmossdk.io/x/feegrant v0.1.1
 	cosmossdk.io/x/tx v0.13.4
 	cosmossdk.io/x/upgrade v0.1.4
-	github.com/CosmWasm/wasmvm/v2 v2.1.0
+	github.com/CosmWasm/wasmvm/v2 v2.1.1
 	github.com/cometbft/cometbft v0.38.10
 	github.com/cosmos/cosmos-db v1.0.2
 	github.com/cosmos/cosmos-sdk v0.50.9
-	github.com/cosmos/gogoproto v1.5.0
+	github.com/cosmos/gogoproto v1.6.0
 	github.com/cosmos/ibc-go/modules/capability v1.0.1
 	github.com/cosmos/ibc-go/v9 v9.0.0
 	github.com/golang/protobuf v1.5.4

@@ -11,7 +11,7 @@ replace (
 
 require (
 	cosmossdk.io/api v0.7.5
-	cosmossdk.io/client/v2 v2.0.0-beta.3
+	cosmossdk.io/client/v2 v2.0.0-beta.4
 	cosmossdk.io/core v0.11.1
 	cosmossdk.io/log v1.4.0
 	cosmossdk.io/store v1.1.0
@@ -24,7 +24,7 @@ require (
 	github.com/cometbft/cometbft v0.38.10
 	github.com/cosmos/cosmos-db v1.0.2
 	github.com/cosmos/cosmos-sdk v0.50.9
-	github.com/cosmos/gogoproto v1.5.0
+	github.com/cosmos/gogoproto v1.6.0
 	github.com/cosmos/ibc-go/modules/capability v1.0.1
 	github.com/cosmos/ibc-go/v9 v9.0.0
 	github.com/spf13/cast v1.7.0
