@@ -53,7 +53,6 @@ type TestingApp interface {
   GetBaseApp() *baseapp.BaseApp
   GetStakingKeeper() ibctestingtypes.StakingKeeper
   GetIBCKeeper() *keeper.Keeper
-  GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper
   GetTxConfig() client.TxConfig
 
   // Implemented by SimApp
@@ -84,11 +83,6 @@ func (app *SimApp) GetStakingKeeper() ibctestingtypes.Keeper {
 // GetIBCKeeper implements the TestingApp interface.
 func (app *SimApp) GetIBCKeeper() *ibckeeper.Keeper {
   return app.IBCKeeper
-}
-
-// GetScopedIBCKeeper implements the TestingApp interface.
-func (app *SimApp) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
-  return app.ScopedIBCKeeper
 }
 
 // GetTxConfig implements the TestingApp interface.
@@ -329,8 +323,7 @@ This might look like:
 ```go
 suite.chainA.GetSimApp().ICAAuthModule.IBCApp.OnChanOpenInit = func(
   ctx sdk.Context, order channeltypes.Order, connectionHops []string,
-  portID, channelID string, chanCap *capabilitytypes.Capability,
-  counterparty channeltypes.Counterparty, version string,
+  portID, channelID string, counterparty channeltypes.Counterparty, version string,
 ) error {
   return fmt.Errorf("mock ica auth fails")
 }
