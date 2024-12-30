@@ -1,7 +1,9 @@
 package cli
 
 import (
+	govtypes "cosmossdk.io/x/gov/types"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/types/address"
 	"regexp"
 	"slices"
 	"strconv"
@@ -109,7 +111,7 @@ func newUpgradeChannelsTxCmd() *cobra.Command {
 				}
 
 				// construct a MsgChannelUpgradeInit which will upgrade the specified channel to a specific version.
-				msgUpgradeInit := types.NewMsgChannelUpgradeInit(ch.PortId, ch.ChannelId, types.NewUpgradeFields(ch.Ordering, ch.ConnectionHops, versionStr), clientCtx.GetFromAddress().String())
+				msgUpgradeInit := types.NewMsgChannelUpgradeInit(ch.PortId, ch.ChannelId, types.NewUpgradeFields(ch.Ordering, ch.ConnectionHops, versionStr), sdk.AccAddress(address.Module(govtypes.ModuleName)).String())
 				msgs = append(msgs, msgUpgradeInit)
 			}
 
